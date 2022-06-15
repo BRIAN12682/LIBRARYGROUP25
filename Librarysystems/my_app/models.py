@@ -26,6 +26,7 @@ class Books(models.Model):
     def __str__(self):
         return self.title
 
+
 '''    def delete(self, *args, **kwargs ):
         self.pdf.delete()
         self.cover.delete()
