@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>LOG IN</title>
+</head>
+<body>
+    {% if form.errors %}
+    <p> There is somethinfg wrong you have entered!</p>
+    {% endif %}
+    {% if next %}
+    <p> You cannot access the next page</p>
+    {% endif %}
+    <form method = "post" action="{%url 'log in' %}">
+          {% csrf_token %}
+
+    <p> user_name: {{ form.username}} </p>
+    <p> password:  {{ form.password}} </p>
+      <p>  input = type = "Submit" = "Log in" </p>
+        < input type = "hidden" name = "next" value = "{{next}}">
+    </form>
+</body>
+</html>
