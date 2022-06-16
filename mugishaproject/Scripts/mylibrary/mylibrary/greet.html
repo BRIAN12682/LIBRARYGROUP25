@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Booksearch</h1>
+       <p>booksavailable:</p>
+       <ul>
+        {% for book in booksavailable%}
+           <li> {{book.title}}
+            {{book.author}}, {{book.publicatin_date}},
+            {{book.subject_area}}</li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>
