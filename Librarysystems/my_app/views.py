@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 
 
 def hello(request):
-    return render(request, 'my_app/hello.html')
+    return render(request, '/hello.html')
 
 
 def register(request):
@@ -22,4 +22,4 @@ def register(request):
         form = UserCreationForm()
 
     context = {'form': form}
-    return render(request, 'registration/register.html', context)
+    return render(request, 'templates/register.html', context)

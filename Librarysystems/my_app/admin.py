@@ -1,13 +1,11 @@
-#from django.contrib import admin
-
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-
+'''from django.contrib import admin
+from django.contrib.auth.models import a
+from django.contrib.auth.models import models
 
 # Create your models here.
 
 
-class Admin(AbstractUser):
+class Admin(admin):
     is_admin = models.BooleanField(default=False)
     is_publisher = models.BooleanField(default=False)
     is_librarian = models.BooleanField(default=False)
@@ -28,7 +26,7 @@ class Books(models.Model):
     def __str__(self):
         return self.title
 
-
+'''
 '''    def delete(self, *args, **kwargs ):
         self.pdf.delete()
         self.cover.delete()

@@ -11,12 +11,12 @@
     {% if next %}
     <p> You cannot access the next page</p>
     {% endif %}
-    <form method = "post" action="{%url 'log in' %}">
+    <form method = "post" action="{%url 'login' %}">
           {% csrf_token %}
 
     <p> user_name: {{ form.username}} </p>
     <p> password:  {{ form.password}} </p>
-      <p>  input = type = "Submit" = "Log in" </p>
+      <p>  input = type = "Submit" = "Login" </p>
         < input type = "hidden" name = "next" value = "{{next}}">
     </form>
 </body>
