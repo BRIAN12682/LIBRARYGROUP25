@@ -6,15 +6,15 @@
 </head>
 <body>
     <h1> REGISTRATION PAGE</h1>
-    <form> method = "post" action = "{% url 'register'%}"
+    <form method = "post" action = "{% url 'register'%}">
      {% csrf_token %}
 
     {% if form.errors %}
-    <p> there are errors in the form</p>
+    <h4> there are errors in the form</h4>
     {% endif %}
 
     {{ form }}
-    <p> input type = "submit" value = "register"</p>
+    <p><input type = "submit" value = "register"></p>
     </form>
 </body>
 </html>
