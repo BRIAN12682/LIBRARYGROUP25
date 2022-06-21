@@ -3,9 +3,7 @@ Library Systems web based application
 
 ## Getting started
 Creating a web based library syastem that allows users to request for the books and allows the librarian to add the books.
-the librarian can be allowed to add various information about the books.
-![img_2.png](img_2.png)
- [Use the template at the bottom](#editing-this-readme)!
+the librarian can be allowed to add various information about
 
 ## Add your files
 
