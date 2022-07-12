@@ -41,7 +41,7 @@ class Book(models.Model):
 
 
 # class Chat(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)+
 #     message = models.TextField()
 #     posted_at = models.DateTimeField(auto_now=True, null=True)
 
