@@ -1,12 +1,9 @@
 # LIBRARY SYSTEMS Group25
-
 Library Systems web based application 
 
 ## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Creating a web based library syastem that allows users to request for the books and allows the librarian to add the books.
+the librarian can be allowed to add various information about
 
 ## Add your files
 
