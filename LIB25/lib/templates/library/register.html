@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %} {% load crispy_forms_tags %}
+<title>LIBRARY MANAGEMENT SYSTEM 25</title>
+<style>
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+    }
+    body {
+        background-image:url('{% static "images/Wallpaper1.jpg" %}');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+    }
+
+    #logo-img {
+        height: 7em;
+        width: 7em;
+        object-fit: cover;
+        object-position: center center;
+    }
+
+    #page-title {
+        font-size: 3em;
+        color: #f1f71f71;
+        font-family: cursive;
+        text-shadow: 2px 2px 12px #b7652a;
+    }
+     .modal-sub-footer {
+            display: flex;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            align-items: left;
+            justify-content: flex-end;
+            padding: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            border-bottom-right-radius: calc(0.3rem - 1px);
+            border-bottom-left-radius: calc(0.3rem - 1px);
+        }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIBRARY MANAGEMENT SYSTEM GROUP 25</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/script.min.js' %}"></script>
+
+</head>
+
+<body class='bg-dark text-light'>
+    <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 py-5 mb-3">
+        <h2 class="text-center fw-bolder" id="page-title">LIBRARY MANAGEMENT 25</h2>
+    </div>
+    <div class="container h-100 d-flex flex-column justify-content-center">
+        <div class="col-md-6 offset-md-3">
+            <div class="card bg-dark card-outline-primary">
+                <div class="card-header">
+                    <h5 class="card-title">Create an Account</h5>
+                </div>
+                <div class="card-body">
+                    <form id="register-frm" action="" method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="from-group">
+                            <div class="mt-2 d-flex w-100 justify-content-end">
+                                <a class="btn btn-light rounded-0 btn-sm mr-2" href="/login"><i class="fa fa-angle-left"></i> Back to Login</a>
+                                <button class="btn btn-primary rounded-0 btn-sm">Create Account</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<footer class="bg-light text-lg-start">
+
+        <div class="text-center p-3" style="background-color: red(0, 0, 0, 0.2);">
+            © {% now 'D M Y' %} Copyright:
+            <a class="text-dark" href="https://www.google.com/search?q=MAKE+YOUR+DJANGO+APP&source=lmns&bih=357&biw=780&hl=en-US&sa=X&ved=2ahUKEwiJrPKg5PL4AhUGYxoKHXHRCKwQ_AUoAHoECAEQAA" target="_google_make_yours">LIB GROUP 25 MAKERERE UNIVERSITY</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+<script>
+    $(function() {
+        $('#register-frm').submit(function(e) {
+            start_loader()
+        })
+    })
+</script>
+
+</html>
