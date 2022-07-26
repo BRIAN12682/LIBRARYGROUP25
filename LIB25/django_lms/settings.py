@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'lmsApp.apps.lmsAppConfig',
     'crispy_forms',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+
 ]
 
 MIDDLEWARE = [
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'django_lms.urls'
