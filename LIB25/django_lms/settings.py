@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'lmsApp.apps.lmsAppConfig',
     'crispy_forms',
+    'django_lms',
 
 ]
 
