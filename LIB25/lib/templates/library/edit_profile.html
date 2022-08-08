@@ -1,0 +1,98 @@
+{% extends 'library/base.html' %} {% load widget_tweaks %} {% block content %}
+
+<head>
+    <style media="screen">
+        body {
+            background-color: #ffffff;
+        }
+        
+        a:link {
+            text-decoration: none;
+        }
+        
+        .note {
+            text-align: center;
+            height: 80px;
+            background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+            color: #fff;
+            font-weight: bold;
+            line-height: 80px;
+        }
+        
+        .form-content {
+            padding: 5%;
+            border: 1px solid #ced4da;
+            margin-bottom: 2%;
+        }
+        
+        .form-control {
+            border-radius: 1.5rem;
+        }
+        
+        .btnSubmit {
+            border: none;
+            border-radius: 1.5rem;
+            padding: 1%;
+            width: 20%;
+            cursor: pointer;
+            background: #005d94;
+            color: #fff;
+        }
+        
+        .menu {
+            top: 50px;
+        }
+    </style>
+
+
+</head>
+<br><br><br><br><br><br>
+<!------ update page for doctor by admin(sumit)  ---------->
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container register-form">
+        <div class="form">
+            <div class="note">
+                <p>EDIT PROFILE</p>
+            </div>
+            <div class="form-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field userForm.username class="form-control" placeholder="Username" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field userForm.college class="form-control" placeholder="College" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field userForm.course class="form-control" placeholder="Course" %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field userForm.password1 class="form-control" placeholder="New Password" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field studentForm.email class="form-control" placeholder="Email" %}
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+                    <center><button type="submit" class="btnSubmit">Edit</button></center>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!--
+developed By : sumit kumar
+-->
+
+{% endblock content %}

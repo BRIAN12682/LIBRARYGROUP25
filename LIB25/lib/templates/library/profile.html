@@ -1,0 +1,24 @@
+{% extends 'library/base.html' %} {% load static %} {% block header %} {% endblock %} {% block content %}
+<div class="container h-100 d-flex flex-column align-items-center justify-content-center">
+    <div class="col-md-6">
+        <div class="card bg-dark">
+            <div class="card-header">
+                <h5 class="card-title">Profile Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <p class = "text-warning"><b>First Name:</b> {{user.first_name}}</p>
+                    <p class = "text-warning"><b>Last Name:</b> {{user.lastn_ame}}</p>
+                    <p class = "text-danger"><b>Email:</b> {{user.email}}</p>
+                    <p class = "text-light"><b>Username:</b> {{user.username}}</p>
+                    <p class = "text-light"><b class = "text-bold">Fullname:</b> {{user.first_name}}  {{user.lastn_ame}}  </p>
+                    <p class = "text-light"><b>College:</b> {{user.college}}</p>
+                    <p class = "text-light"><b>STUDENT ID:</b> {{user.student_id}}</p>
+                    <p class = "text-light"><b>Registration Number:</b> {{user.Registration_Number}}</p>
+                    <p class = "text-light"><b>Year:</b> {{2022}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
