@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import chatMessages, Books, Students,Request
+from .models import chatMessages, Books, Request, IssueBook
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User as UserModel
 from django.db.models import Q
@@ -20,10 +20,10 @@ def home_view(request):
         if 'book_ids' in request.COOKIES:
             book_ids = request.COOKIES['book_ids']
             counter = book_ids.split('|')
-            book_count_in_cart = len(set(counter))
+            book_count = len(set(counter))
         else:
-            book_count_in_cart = 0
-        return render(request, 'library/dashboard.html',{'books': books, 'books_count_in_cart': book_count_in_cart})
+            book_count = 0
+        return render(request, 'library/dashboard.html',{'books': books, 'books_count': book_count})
     else:
         return render(request, 'library/index.html')
 
@@ -51,13 +51,6 @@ def register(request):
     return render(request, "library/register.html", context)
 
 
-def dashboard(request):
-    books=models.Books.objects.all()
-    if request.user.is_authenticated:
-        return render(request, 'library/dashboard.html',{'books':books})
-    return render(request,'library/index.html')
-
-
 @login_required
 def chat(request):
     User = get_user_model()
@@ -76,7 +69,7 @@ def chat(request):
         "chat_id": int(request.GET['u'] if request.method == 'GET' and 'u' in request.GET else 0)
     }
     print(request.GET['u'] if request.method == 'GET' and 'u' in request.GET else 0)
-    return render(request, "library/home.html", context)
+    return render(request, "library/chat.html", context)
 
 
 @login_required
@@ -125,24 +118,24 @@ def lib_view(request):
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
         counter=book_ids.split('|')
-        book_count_in_cart=len(set(counter))
+        book_count=len(set(counter))
     else:
-        book_count_in_cart=0
-    return render(request, 'library/customer_home.html',{'books':books,'book_count_in_cart':book_count_in_cart})
+        book_count=0
+    return render(request, 'library/lib_home.html',{'books':books,'book_count':book_count})
 
 
-def add_to_cart_view(request,pk):
+def add_to_wishlist(request,pk):
     books=models.Books.objects.all()
 
     #for cart counter, fetching products ids added by customer from cookies
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
         counter=book_ids.split('|')
-        book_count_in_cart=len(set(counter))
+        book_count=len(set(counter))
     else:
-        book_count_in_cart=1
+        book_count=1
 
-    response = render(request, 'library/ondex.html',{'books':books,'product_count_in_cart':book_count_in_cart})
+    response = render(request, 'library/ondex.html',{'books':books,'book_count':book_count})
 
 
     if 'book_ids' in request.COOKIES:
@@ -156,80 +149,72 @@ def add_to_cart_view(request,pk):
         response.set_cookie('book_ids', pk)
 
     book=models.Books.objects.get(id=pk)
-    messages.info(request, book.title + ' added to cart successfully!')
+    messages.info(request, book.title + ' added to wishlist successfully!')
 
     return response
 
 
 @login_required
-def books_view(request):
-    books=models.Books.objects.all()
-    return render(request,'ecom/admin_products.html',{'products':books})
+def borrowed_books_view(request):
+    books=models.IssueBook.objects.all()
+    return render(request,'library/borrowed_book.html',{'books':books})    
+
+
+@login_required
+def fines(request):
+    books = models.IssueBook.objects.all()
+    return render(request,'library/fines.html',{'books':books})
+
 
 @login_required
 def my_profile_view(request):
-    student= models.Students.objects.get(id=pk)
-    return render(request,'library/my_profile.html',{'student':student})
+    Students = models.Students.objects.all()
+    context = {
+        "page": "profile",
+
+    }
+    return render(request, "library/profile.html", context)
 
 
-@login_required
-def edit_profile_view(request):
-    student=models.Students.objects.get(user_id=request.user.id)
-    user=models.User.objects.get(id=student.user_id)
-    userForm=forms.UserRegistrationForm(instance=user)
-    studentForm=forms.StudentForm(request.FILES,instance=student)
-    mydict={'userForm':userForm,'customerForm':studentForm}
-    if request.method=='POST':
-        userForm=forms.UserRegistrationForm(request.POST,instance=user)
-        studentForm=forms.StudentForm(request.POST,instance=student)
-        if userForm.is_valid() and studentForm.is_valid():
-            user=userForm.save()
-            user.set_password(user.password)
-            user.save()
-            studentForm.save()
-            return HttpResponseRedirect('my-profile')
-    return render(request,'library/edit_profile.html',context=mydict)
-
-
-def cart_view(request):
+def wishlist(request):
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
         counter=book_ids.split('|')
-        book_count_in_cart=len(set(counter))
+        book_count=len(set(counter))
     else:
-        book_count_in_cart=0
+        book_count=0
 
     book=None
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
         if book_ids != "":
-            book_id_in_cart=book_ids.split('|')
-            book =models.Books.objects.all().filter(id__in = book_id_in_cart)
-    return render(request,'library/wishlist.html',{'books':book,'product_count_in_cart':book_count_in_cart})
+            book_id_in_wishlist=book_ids.split('|')
+            book =models.Books.objects.all().filter(id__in = book_id_in_wishlist)
+    return render(request,'library/wishlist.html',{'books':book,'book_count':book_count})
 
 
 @login_required
-def remove_from_cart_view(request,pk):
+def remove_book(request,pk):
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
         counter=book_ids.split('|')
-        book_count_in_cart=len(set(counter))
+        book_count=len(set(counter))
     else:
-        book_count_in_cart=0
+        book_count=0
 
     if 'book_ids' in request.COOKIES:
         book_ids = request.COOKIES['book_ids']
-        book_id_in_cart=book_ids.split('|')
-        book_id_in_cart=list(set(book_id_in_cart))
-        book_id_in_cart.remove(str(pk))
-        books=models.Books.objects.all().filter(id__in = book_id_in_cart)
+        book_id_in_wishlist=book_ids.split('|')
+        book_id_in_wishlist=list(set(book_id_in_wishlist))
+        book_id_in_wishlist.remove(str(pk))
+        books=models.Books.objects.all().filter(id__in = book_id_in_wishlist)
         value=""
-        for i in range(len(book_id_in_cart)):
+        for i in range(len(book_id_in_wishlist)):
             if i==0:
-                value=value+book_id_in_cart[0]
+                value=value+book_id_in_wishlist[0]
             else:
-                value=value+"|"+book_id_in_cart[i]
-        response = render(request, 'library/wishlist.html',{'books':books,'book_count_in_cart':book_count_in_cart,'redirect_to' : request.GET['next_page']})
+                value=value+"|"+book_id_in_wishlist[i]
+        response = render(request, 'library/wishlist.html',{'books':books,'book_count':book_count,'redirect_to' : request.GET['next_page']})
         if value=="":
             response.delete_cookie('book_ids')
         response.set_cookie('book_ids',value)
@@ -248,88 +233,14 @@ def search_view(request):
         book_count_in_cart=0
     word="Searched Result :"
     if request.user.is_authenticated:
-        return render(request,'library/customer_home.html',{'books':books,'word':word,'book_count_in_cart':book_count_in_cart, 'search_text': query})
-    return render(request,'library/ondex.html',{'books':books,'word':word,'book_count_in_cart':book_count_in_cart, 'search_text': query})
-
-
-@login_required
-def my_request_view(request):
-    student = models.Students.objects.get(user_id=request.user.id)
-    requests = models.Request.objects.all().filter(student_id=student)
-    requested_books = []
-    for request in requests:
-        requested_book = models.Books.objects.all().filter(id=request.product.id)
-        requested_books.append(requested_book)
-
-    return render(request, 'library/my_request.html', {'data': zip(requested_books, requests)})
-
-
-@login_required
-def student_info(request):
-    book_in_cart=False
-    if 'book_ids' in request.COOKIES:
-        book_ids = request.COOKIES['book_ids']
-        if book_ids != "":
-            book_in_cart=True
-    if 'book_ids' in request.COOKIES:
-        book_ids = request.COOKIES['book_ids']
-        counter=book_ids.split('|')
-        book_count_in_cart=len(set(counter))
-    else:
-        book_count_in_cart=0
-
-    form = forms.UserRegistrationForm()
-    if request.method == 'POST':
-        form = forms.UserRegistrationForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['college']
-            college=form.cleaned_data['course']
-            course = form.cleaned_data['course']
-            response = render(request, 'library/request1.html')
-            response.set_cookie('email',email)
-            response.set_cookie('college',college)
-            response.set_cookie('course',course)
-            return response
-    return render(request,'library/customer_address.html',{'form':form,'book_in_cart':book_in_cart,'book_count_in_cart':book_count_in_cart})
-
-
-
-
-
-
-@login_required
-def view(request):
-    first_name=models.Students.objects.filter(user_id=request.user.id)
-    issue_book=models.IssuedBook.objects.filter(student_id=first_name[0].student_id)
-
-    list1=[]
-
-    list2=[]
-    for issueB in issue_book:
-        books=models.Books.objects.filter(status=issueB.status)
-        for book in books:
-            t=(request.user,first_name[0].student_id,first_name[0].adress,book.title,book.author)
-            list1.append(t)
-        issdate=str(issueB.Issuing_date.day)+'-'+str(issueB.Issuing_date.month)+'-'+str(issueB.Issuing_date.year)
-        expdate=str(issueB.return_date.day)+'-'+str(issueB.return_date.month)+'-'+str(issueB.return_date.year)
-        #fine calculation
-        days=(datetime.date.today()-issueB.Issuing_date)
-        print(datetime.date.today())
-        d=days.days
-        fine=0
-        if d>15:
-            day=d-15
-            fine=day*10
-        t=(issdate,expdate,fine)
-        list2.append(t)
-
-    return render(request,'library/viewborrowedbook.html',{'list1':list1,'list2':list2})
+        return render(request,'library/lib_home.html',{'books':books,'word':word,'book_count':book_count_in_cart, 'search_text': query})
+    return render(request,'library/ondex.html',{'books':books,'word':word,'book_count':book_count_in_cart, 'search_text': query})
 
 
 def requests(request,id):
     book = Books.objects.get(id=id)
 
-    return render(request, 'library/customer_address.html', {'book':book,'book_id':id,'title':'Request a book'})
+    return render(request, 'library/request_address.html', {'book':book,'book_id':id,'title':'Request a book'})
 
 def request_book(request,id):
     user_id = request.user.id
@@ -343,5 +254,24 @@ def request_book(request,id):
     messages.info(request, ("Book was requested succesfull. wait for librarian to issue book"))
 
     return render(request,'library/dashboard.html')
+
+
+def return_book(request,id):
+    book = models.Request.objects.get(id=id)
+
+    return render(request, 'library/returning_book.html', {'book':book,'book_id':id,'title':'Return a book'})
+
+def return_book_view(request,id):
+    user_id = request.user.id
+    book = models.Request.objects.get(id=id)
+    if book.status == 'unavailable':
+        book.status == 'available'
+        book.save()
+    user = User.objects.get(id=user_id)
+    return_book = models.Returns.objects.create(user=user, book=book, date_returned=datetime.datetime.now())
+    return_book.save()
+    messages.info(request, ("RETURN request for book was successfully  sent. wait for librarian to issue book"))
+
+    return render(request,'library/return_success.html')
 
 

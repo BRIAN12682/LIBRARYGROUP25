@@ -1,14 +1,16 @@
+from tkinter.tix import Tree
 from django.conf.global_settings import AUTH_USER_MODEL
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from django.utils import timezone
+import datetime
 from datetime import datetime, timedelta
 from datetime import date
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=50)
     is_login = models.BooleanField(default=False)
 
@@ -18,9 +20,9 @@ class UserProfile(models.Model):
 
 class chatMessages(models.Model):
     user_from = models.ForeignKey(User,
-        on_delete=models.CASCADE,related_name="+")
+                                  on_delete=models.CASCADE, related_name="+")
     user_to = models.ForeignKey(User,
-        on_delete=models.CASCADE,related_name="+")
+                                on_delete=models.CASCADE, related_name="+")
     message = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
 
@@ -69,8 +71,9 @@ class Books(models.Model):
     author = models.TextField(blank=True, null=True)
     publisher = models.CharField(max_length=250)
     publication_date = models.DateTimeField()
-    Cover = models.ImageField(upload_to='book_image/',null=True,blank=True)
-    status = models.CharField(max_length=30, choices=(('available', 'available'), ('unavailable', 'unavailable')), default ='available')
+    Cover = models.ImageField(upload_to='book_image/', null=True, blank=True)
+    status = models.CharField(max_length=30, choices=(('available', 'available'), ('unavailable', 'unavailable')),
+                              default='available')
     delete_flag = models.IntegerField(default=0)
     date_added = models.DateTimeField(default=timezone.now)
     date_created = models.DateTimeField(auto_now=True)
@@ -109,10 +112,10 @@ class Students(models.Model):
         verbose_name_plural = "Students"
 
     def __str__(self):
-        return self.student_id, ' ',self.first_name, ' ',self.middle_name if not self.middle_name == '' else' ', self.Surname
+        return self.student_id, ' ', self.first_name, ' ', self.middle_name if not self.middle_name == '' else ' ', self.Surname
 
     def name(self):
-        return self.first_name, ' ',self.middle_name if not self.middle_name == '' else '', self.Surname
+        return self.first_name, ' ', self.middle_name if not self.middle_name == '' else '', self.Surname
 
     @property
     def get_id(self):
@@ -127,62 +130,59 @@ class Request(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     book = models.ForeignKey(Books, on_delete=models.CASCADE, null=True)
     date_requested = models.DateField(auto_now_add=True)
-    return_date=models.DateTimeField(null=True)
-    status = models.ForeignKey(Books, on_delete=models.CASCADE, null=True,related_name="+")
+    return_date = models.DateTimeField(null=True, blank=True)
+    status = models.ForeignKey(Books, on_delete=models.CASCADE, null=True, related_name="+")
 
     def __str__(self):
-        return  self.book
+        return self.book
+
+
+class Returns(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    book = models.ForeignKey(Request, on_delete=models.CASCADE, null=True)
+    date_returned = models.DateField(auto_now_add=True)
+    status = models.ForeignKey(Books, on_delete=models.CASCADE, null=True, related_name="+")
+
+    def __str__(self):
+        return self.book
+
+@property
+def days_till_fine(self):
+        # d1 = datetime.strptime(self.return_date, "%Y/%m/%d").date()
+        # d2 = datetime.strptime(datetime.datetime.now(), "%Y/%m/%d")
+    today = datetime.datetime.now()
+    delta = self.return_date - today
+        # difference between dates in timedelta
+        # delta = d2.date() - d1
+    return delta
+
+@property
+def fine_calc(self):
+    fine = IssueBook.Fine
+    if self.days_till_fine <= 3:
+        return "5000"
+
+    elif self.days_till_fine <= 10:
+        return "10,000"
+
+    else:
+        return "Not yet Fine"
 
 
 class IssueBook(models.Model):
     book_to = models.ForeignKey(User,
                                 on_delete=models.CASCADE, related_name="+")
     issue_book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name="+")
-    Issuing_date = models.user_to = models.ForeignKey(Request,on_delete=models.CASCADE, related_name="+")
-    return_date = models.ForeignKey(Request, on_delete=models.CASCADE, null=True, related_name="+")
-    status = models.CharField(max_length=2, choices=(('1', 'Available'), ('2', 'Unavailable')), default=1)
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = "Issue a book to a student"
-
-    def __str__(self):
-        return str(f"{self.issue_book}")
-
-
-@property
-def days_till_fine(self):
-    day = self.IssueBook.return_date - date.today()
-    days = str(day).split(", ", 1)[0]
-    return days
-
-
-def fine_calc(self, days_till_fine):
-    if abs(int(days_till_fine)) > 3:
-        return 5000
-    if abs(int(days_till_fine)) > 10:
-        return 10,000
-    else:
-        return "No fine yet"
-
-
-class FinedStudents(models.Model):
-    book_to = models.ForeignKey(IssueBook,
-                                on_delete=models.CASCADE, related_name="book_to+")
-    Issued_book = models.ForeignKey(IssueBook, on_delete=models.CASCADE, related_name="Issued_book+")
-    Issuing_date = models.ForeignKey(IssueBook, on_delete=models.CASCADE, related_name="Issuing_date+")
-    return_date = models.DateField()
+    Issuing_date = models.ForeignKey(Request, on_delete=models.CASCADE, related_name="+", null=True)
+    status = models.CharField(max_length=2, choices=(('1', 'Available'), ('2', 'Unavailable')), null=True, default=1)
+    date_created = models.DateTimeField(auto_now_add=True, null=Tree)
+    return_date = models.DateTimeField(null=True)
     days_till_fine = days_till_fine
     Fine = fine_calc
-    status = models.CharField(max_length=50)
-    date_created = models.DateTimeField()
 
     class Meta:
-        verbose_name_plural = "Fines"
+
+        verbose_name_plural = "Issue a book to a student "
 
     def __str__(self):
-        return str(f"{self.Issued_book}, {self.Fine}, {self.book_to}, {self.status}")
-
-
-
-
+        return str(f"{self.issue_book}, {self.Fine}, {self.book_to}, {self.status}")

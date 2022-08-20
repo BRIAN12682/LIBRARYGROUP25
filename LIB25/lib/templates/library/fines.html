@@ -1,6 +1,8 @@
-{% extends 'library/base.html' %}
+ {% extends "library/base.html " %}
 {% load static %}
 {% block content %}
+
+
 
   <style media="screen">
     body,
@@ -31,7 +33,7 @@ html {
 }
 
 body {
-  background-color:#000000;
+  background-color:#8c9eff;
 }
 
 .page-wrapper {
@@ -185,7 +187,7 @@ body {
 
 .info-inner .p-company {
   font-family: 'Lato', sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   text-transform: uppercase;
   color: #FFE11B;
 }
@@ -223,6 +225,31 @@ body {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
 }
+
+.cart .description {
+  -webkit-transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
+  -moz-transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
+  -o-transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
+  transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
+  /* ease-out */
+  -webkit-transition-timing-function: cubic-bezier(0, 0, 0.18, 1);
+  -moz-transition-timing-function: cubic-bezier(0, 0, 0.18, 1);
+  -o-transition-timing-function: cubic-bezier(0, 0, 0.18, 1);
+  transition-timing-function: cubic-bezier(0, 0, 0.18, 1);
+  /* ease-out */
+  -webkit-transition-delay: 100ms;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  color: #252525;
+}
+
 .cart .add-to-cart {
   -webkit-transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
   -moz-transition: all 600ms cubic-bezier(0, 0, 0.18, 1);
@@ -279,70 +306,70 @@ body {
     width: 100%;
   }
 }
+ a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+
+    .float{
+      position:fixed;
+      width:70px;
+      height:70px;
+      bottom:60px;
+      right:60px;
+      background-color:#428bca;
+      color:#FFF;
+      border-radius:50px;
+      text-align:center;
+      box-shadow: 5px 5px 5px #505050;
+    }
+
+.my-float{
+	margin-top:22px;
+}
+.fa{
+  padding: 0em 0.5em;
+}
   </style>
 
-{%if books %}
-<h3 style="text-align:center; color:yellow;">{{word}}</h3>
-<br>
-  <div class="row">
-
-      {% for book in books %}
-      <!-- card1 -->
-      <div class="column">
-      <div class="container page-wrapper" style="width: 450px;">
-        <div class="page-inner">
-          <div class="row">
-            <div class="el-wrapper">
-              <div class="box-up">
-                <img class="img" src="{% static b.book_image.url %}" alt="Cover" height="300px" width="300px">
-                <div class="img-info">
-                  <div class="info-inner">
-                    <span style="background-color:#08050a; color:yellow;"class="p-company">{{book.title}}</span>
-
-                  </div>
-                  <div class="a-size">{{book.description}}</div>
-                </div>
-              </div>
-
-              <div class="box-down">
-                <div class="h-bg">
-                  <div class="h-bg-inner"></div>
-                </div>
-
-                <a class="cart" href="{% url 'add' book.id  %}">
-                  <span class="price"> {{book.isbn}}</span>
-                  <span class="add-to-cart">
-                    <span class="txt">Add to Wishlist</span>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-
-{% if forloop.counter|divisibleby:"3" %}
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title" class="text bg-primary">Total Borrowed Books In the Library</h6>
     </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>CURRENT HOLDER</th>
+          <th>BOOK COVER</th>
+          <th>Days till fine</th>
+          <th>FINES</th>
+        </tr>
+      </thead>
+      {% for book in books %}
+  {% if book %}
 
-    <div class="row">
-
-          <br><br><br><br><br>
-{% endif %}
-  {% endfor %}
+      <tr>
+        <td> {{book.book_to}}</td>
+        <td> <img src="{% static book.book_image.url %}" alt="BOOK COVER" height="40px" width="40px" /></td>
+        <td>{{book.days_till_fine}}</td>
+        <td>{{fine}}</td>
+      </tr>
+      {%else%}
+      <br><br><br>
+      <h1> Books issued by librarian!!</h1>
+      {% endif %}
+      {% endfor %}
+    </table>
+  </div>
 </div>
 
-{%else%}
-<h3 style="text-align:center; color:yellow;">No BOOKS Found</h3>
-{%endif%}
 
-<script>
-    {%if messages %}
-    {%for message in messages%}
-    alert('{{message}}');
-    {%endfor%}
-    {%endif%}
-</script>
-<br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock content %}

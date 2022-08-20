@@ -94,8 +94,8 @@
                     <td> {{book.isbn}}</td>
                     <td>{{book.description}}</td>
 
-                    <td><a class=" bi bi-trash btn btn-danger btn-xs" href="{% url 'remove-from-cart' book.id  %}?next_page={{request.path}}"><span class="glyphicon glyphicon-trash">Delete from Wishlist</span></a></td>
-                    <td><a class=" bi bi-trash btn btn-success btn-xs" href="{% url 'request' book.id  %}?next_page={{request.path}}"><span class="glyphicon glyphicon-trash">Borrow</span></a></td>
+                    <td><a class=" bi bi-trash btn btn-danger btn-xs" href="{% url 'remove-book' book.id  %}?next_page={{request.path}}"><span class="glyphicon glyphicon-trash">Delete from Wishlist</span></a></td>
+                    <td><a class=" bi bi-trash btn btn-success btn-xs" href="{% url 'request' book.id  %}?next_page={{request.path}}"><span class="glyphicon glyphicon-trash">REQUEST</span></a></td>
                 </tr>
                 {%else%}
                 <br><br><br>
