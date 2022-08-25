@@ -1,0 +1,31 @@
+{% extends 'library/base.html' %} {% load static %} {% block header %} {% endblock %} {% block content %}
+<div class="container h-100 d-flex flex-column align-items-center justify-content-center">
+    <div class="col-md-6">
+        <div class="card bg-dark">
+            <div class="card-header">
+                <a href="#"><button class="btn btn-primary btn-lg" ><span>PROFILE DETAILS</span></button></a>
+                <h5 class="text-light">N.B Change of information with the librarian at registration </h5>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <p class = "text-light"><b>First Name:</b> {{user.first_name}}</p>
+                    <p class = "text-light"><b>Last Name:</b> {{user.last_name}}</p>
+                    <p class = "text-light"><b>Email:</b> {{user.email}}</p>
+                    <p class = "text-light"><b>Username:</b> {{user.username}}</p>
+                    <p class = "text-light"><b class = "text-bold">Fullname:</b> {{user.first_name}}  {{user.last_name}}  </p>
+
+                    <p class = "text-light"><b>College:</b> {{user.college}}</p>
+                    <p class = "text-light"><b>STUDENT ID:</b> {{Students.student_id}}</p>
+                    <p class = "text-light"><b>Registration Number:</b> {{Students.Registration_Number}}</p>
+                    <p class = "text-light"><b>Year:</b> {{2022}}</p>
+
+                </div>
+                <div style="text-align: center;">
+
+
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
